@@ -133,13 +133,14 @@ Deno.serve(async (req: Request) => {
       encryptedKeyPrefix: settings.api_key.substring(0, 10) + "...",
     });
 
+    console.log("=== DUTTYFY REQUEST DETAILS ===");
+    console.log("Full URL:", `${settings.api_url}/${settings.api_key}`);
     console.log("Duttyfy payload:", JSON.stringify(payload, null, 2));
-    console.log("Payload keys:", Object.keys(payload));
-    console.log("Request details:", {
-      method: "POST",
-      contentType: "application/json",
-      bodyLength: JSON.stringify(payload).length
-    });
+    console.log("Amount in cents:", amountInCents);
+    console.log("Clean CPF:", cleanCpf);
+    console.log("Customer:", payload.customer);
+    console.log("Item:", payload.item);
+    console.log("================================");
 
     let response: Response | undefined;
     let lastError: any;
