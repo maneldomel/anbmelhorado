@@ -127,36 +127,22 @@
     
     <!-- Meta Pixel Code -->
     <script>
-    (function() {
-      if (window._fbqInitialized) {
-        console.log('Facebook Pixel already initialized, skipping...');
-        return;
-      }
-      window._fbqInitialized = true;
-
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-
-      fbq('init', '1151218357125907');
-
-      if (!window._fbqPageViewTracked) {
-        fbq('track', 'PageView');
-        window._fbqPageViewTracked = true;
-        console.log('Facebook Pixel: Initial PageView tracked');
-      }
-    })();
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '4154012174863560');
+    fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
   </head>
   <body class="font-sans antialiased text-gray-800">
     <noscript>
-      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1151218357125907&ev=PageView&noscript=1"/>
+      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4154012174863560&ev=PageView&noscript=1"/>
     </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
