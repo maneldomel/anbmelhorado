@@ -219,11 +219,27 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const duttyfyResponse = JSON.parse(responseText);
-    console.log("Duttyfy transaction created:", JSON.stringify(duttyfyResponse, null, 2));
+    let duttyfyResponse;
+    try {
+      duttyfyResponse = JSON.parse(responseText);
+      console.log("Duttyfy transaction created:", JSON.stringify(duttyfyResponse, null, 2));
+    } catch (parseError) {
+      console.error("Failed to parse Duttyfy response:", parseError);
+      console.error("Raw response text:", responseText);
+      return new Response(
+        JSON.stringify({
+          error: "Invalid response from payment processor",
+          details: { parseError: String(parseError), responseText }
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
 
-    const transactionId = duttyfyResponse.transactionId || externalRef;
-    const qrCodeText = duttyfyResponse.pixCode || "";
+    const transactionId = duttyfyResponse.transactionId || duttyfyResponse.transaction_id || duttyfyResponse.id || externalRef;
+    const qrCodeText = duttyfyResponse.pixCode || duttyfyResponse.pix_code || duttyfyResponse.qr_code || "";
     const qrCodeImage = qrCodeText
       ? `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrCodeText)}`
       : "";
