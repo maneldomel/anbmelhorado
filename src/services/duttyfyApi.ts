@@ -56,6 +56,9 @@ export async function createDuttyfyTransaction(
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Edge Function error:', errorData);
+      console.error('Error details:', JSON.stringify(errorData.details, null, 2));
+      console.error('HTTP Status:', errorData.status);
+      console.error('Raw response excerpt:', errorData.details?.rawResponse);
       throw new Error(errorData.error || 'Failed to create Duttyfy transaction');
     }
 
