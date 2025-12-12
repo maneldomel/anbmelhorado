@@ -134,13 +134,15 @@ Deno.serve(async (req: Request) => {
 
     console.log("Duttyfy payload:", JSON.stringify(payload, null, 2));
 
-    let response: Response;
+    let response: Response | undefined;
     let lastError: any;
     const maxRetries = 3;
     const baseDelay = 2000;
 
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
+        console.log(`Attempt ${attempt + 1}/${maxRetries}: Calling ${settings.api_url}/${settings.api_key}`);
+
         response = await fetch(`${settings.api_url}/${settings.api_key}`, {
           method: "POST",
           headers: {
@@ -166,6 +168,7 @@ Deno.serve(async (req: Request) => {
         }
       } catch (error) {
         lastError = error;
+        console.error(`Attempt ${attempt + 1} failed with error:`, error);
         if (attempt < maxRetries - 1) {
           const delay = baseDelay * Math.pow(2, attempt);
           console.log(`Request failed. Retrying in ${delay}ms...`);
@@ -175,10 +178,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (!response) {
+      console.error("All retry attempts failed. Last error:", lastError);
       return new Response(
         JSON.stringify({
           error: "Falha ao conectar com o processador de pagamentos",
-          details: lastError?.message
+          details: lastError?.message || String(lastError)
         }),
         {
           status: 503,
@@ -189,6 +193,8 @@ Deno.serve(async (req: Request) => {
 
     const responseText = await response.text();
     console.log("Duttyfy raw response:", responseText);
+    console.log("Duttyfy response status:", response.status);
+    console.log("Duttyfy response ok:", response.ok);
 
     if (!response.ok) {
       console.error("Duttyfy error response:", responseText);
@@ -267,8 +273,14 @@ Deno.serve(async (req: Request) => {
     });
   } catch (error: any) {
     console.error("Error creating Duttyfy transaction:", error);
+    console.error("Error stack:", error.stack);
+    console.error("Error details:", JSON.stringify(error, null, 2));
     return new Response(
-      JSON.stringify({ error: "Internal server error", message: error.message }),
+      JSON.stringify({
+        error: "Internal server error",
+        message: error.message,
+        stack: error.stack
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
