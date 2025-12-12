@@ -20,8 +20,12 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.json();
     const status = body?.data?.status;
+    const data = body?.data;
 
-    console.log("Webhook recebido:", { status });
+    const nome = data?.customer?.name || "Cliente";
+    const valor = (data?.amount || 0) / 100;
+
+    console.log("Webhook recebido:", { status, nome, valor });
 
     if (status === "paid") {
       console.log("Enviando notificação de pagamento aprovado...");
