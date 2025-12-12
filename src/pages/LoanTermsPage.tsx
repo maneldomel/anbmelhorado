@@ -6,6 +6,14 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { navigateWithParams } from '../utils/urlParams';
 
+declare global {
+  interface Window {
+    addUtm: (url: string) => string;
+  }
+}
+
+const addUtm = window.addUtm;
+
 export default function LoanTermsPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -120,13 +128,17 @@ export default function LoanTermsPage() {
             </div>
           </div>
 
-          <button
-            ref={buttonRef}
-            onClick={handleAccept}
-            className="w-full py-4 px-6 rounded-xl font-semibold text-base bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 shadow-md animate-slide-up-button"
+          <a
+            ref={buttonRef as React.RefObject<HTMLAnchorElement>}
+            href="javascript:void(0)"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = addUtm('/confirmacao-transferencia');
+            }}
+            className="w-full py-4 px-6 rounded-xl font-semibold text-base bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 shadow-md animate-slide-up-button block text-center"
           >
             Li e aceito os termos
-          </button>
+          </a>
         </div>
       </main>
 

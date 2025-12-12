@@ -7,6 +7,14 @@ import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
 import { navigateWithParams } from '../utils/urlParams';
 
+declare global {
+  interface Window {
+    addUtm: (url: string) => string;
+  }
+}
+
+const addUtm = window.addUtm;
+
 export default function LoanSummaryPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -184,13 +192,17 @@ export default function LoanSummaryPage() {
             </div>
           </div>
 
-          <button
-            ref={buttonRef}
-            onClick={handleContinue}
-            className="w-full py-3.5 px-6 rounded-xl font-bold text-base bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 hover:scale-105 active:scale-95 animate-pulse-gentle"
+          <a
+            ref={buttonRef as React.RefObject<HTMLAnchorElement>}
+            href="javascript:void(0)"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = addUtm('/selecionar-parcelas');
+            }}
+            className="w-full py-3.5 px-6 rounded-xl font-bold text-base bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 hover:scale-105 active:scale-95 animate-pulse-gentle block text-center"
           >
             Aceitar Proposta
-          </button>
+          </a>
         </div>
       </main>
 

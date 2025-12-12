@@ -10,6 +10,14 @@ import { trackPurchase } from '../utils/facebookPixel';
 import { saveFunnelData, getFunnelData } from '../utils/funnelStorage';
 import { useAutoplayAudio } from '../hooks/useAutoplayAudio';
 
+declare global {
+  interface Window {
+    addUtm: (url: string) => string;
+  }
+}
+
+const addUtm = window.addUtm;
+
 interface ProcessingStep {
   id: number;
   label: string;
@@ -345,12 +353,16 @@ export default function Upsell1Page() {
                   <p className="text-3xl font-bold text-purple-600">R$ 19,90</p>
                 </div>
 
-                <button
-                  onClick={handleRegularizarTaxa}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mb-4"
+                <a
+                  href="javascript:void(0)"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = addUtm('/upsell-payment');
+                  }}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mb-4 block text-center"
                 >
                   REGULARIZAR TAXA
-                </button>
+                </a>
 
                 <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4">
                   <div className="flex gap-2">
