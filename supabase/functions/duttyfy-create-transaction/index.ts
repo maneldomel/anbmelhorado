@@ -130,9 +130,16 @@ Deno.serve(async (req: Request) => {
     console.log("Creating Duttyfy transaction:", {
       url: `${settings.api_url}/${settings.api_key}`,
       hasEncryptedKey: !!settings.api_key,
+      encryptedKeyPrefix: settings.api_key.substring(0, 10) + "...",
     });
 
     console.log("Duttyfy payload:", JSON.stringify(payload, null, 2));
+    console.log("Payload keys:", Object.keys(payload));
+    console.log("Request details:", {
+      method: "POST",
+      contentType: "application/json",
+      bodyLength: JSON.stringify(payload).length
+    });
 
     let response: Response | undefined;
     let lastError: any;
@@ -198,18 +205,26 @@ Deno.serve(async (req: Request) => {
 
     if (!response.ok) {
       console.error("Duttyfy error response:", responseText);
+      console.error("Duttyfy error status:", response.status);
+      console.error("Duttyfy error headers:", JSON.stringify(Object.fromEntries(response.headers.entries())));
 
       let error;
       try {
         error = JSON.parse(responseText);
-      } catch {
+        console.error("Duttyfy parsed error:", JSON.stringify(error, null, 2));
+      } catch (parseErr) {
+        console.error("Failed to parse error response:", parseErr);
         error = { message: responseText || "Failed to create Duttyfy transaction" };
       }
 
       return new Response(
-        JSON.stringify({ 
-          error: error.message || error.error || "Failed to create Duttyfy transaction",
-          details: error,
+        JSON.stringify({
+          error: error.message || error.error || error.msg || "Erro ao processar pagamento",
+          details: {
+            ...error,
+            httpStatus: response.status,
+            rawResponse: responseText.substring(0, 500)
+          },
           status: response.status
         }),
         {
