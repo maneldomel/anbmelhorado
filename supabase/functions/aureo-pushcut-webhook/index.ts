@@ -30,25 +30,13 @@ Deno.serve(async (req: Request) => {
     if (status === "paid") {
       console.log("Enviando notificação de pagamento aprovado...");
       await fetch(PUSH_PAID, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: "Pagamento aprovado",
-          text: `Cliente: ${nome}\nValor: R$ ${valor}`,
-          info: data
-        })
+        method: "POST"
       });
       console.log("Notificação de pagamento aprovado enviada");
     } else if (status === "waiting_payment") {
       console.log("Enviando notificação de pagamento pendente...");
       await fetch(PUSH_PENDING, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: "Pagamento pendente",
-          text: `Cliente: ${nome}\nValor: R$ ${valor}`,
-          info: data
-        })
+        method: "POST"
       });
       console.log("Notificação de pagamento pendente enviada");
     } else {
