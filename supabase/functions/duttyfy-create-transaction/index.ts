@@ -75,6 +75,28 @@ Deno.serve(async (req: Request) => {
     const cleanCpf = data.cpf.replace(/\D/g, "");
     const amountInCents = Math.round(data.amount * 100);
 
+    if (cleanCpf.length !== 11) {
+      console.error("Invalid CPF length:", cleanCpf.length);
+      return new Response(
+        JSON.stringify({ error: "CPF inválido" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (amountInCents < 100) {
+      console.error("Amount too low:", amountInCents, "centavos");
+      return new Response(
+        JSON.stringify({ error: "Valor mínimo de R$ 1,00" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
     const { data: existingTransaction, error: checkError } = await supabase
       .from("transactions")
@@ -109,6 +131,9 @@ Deno.serve(async (req: Request) => {
       utmParams = utmParts.join("&");
     }
 
+    const cleanPhone = (data.customerPhone || "11999999999").replace(/\D/g, "");
+    const formattedPhone = cleanPhone.length >= 10 ? cleanPhone : "11999999999";
+
     const payload = {
       amount: amountInCents,
       description: data.productName || "Pagamento via Pix",
@@ -116,7 +141,7 @@ Deno.serve(async (req: Request) => {
         name: data.customerName || "Cliente",
         document: cleanCpf,
         email: data.customerEmail || `${cleanCpf}@cliente.com`,
-        phone: data.customerPhone || "11999999999",
+        phone: formattedPhone,
       },
       item: {
         title: data.productName || "Produto Digital",
