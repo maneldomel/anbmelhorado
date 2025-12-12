@@ -174,7 +174,7 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    if (!response!) {
+    if (!response) {
       return new Response(
         JSON.stringify({
           error: "Falha ao conectar com o processador de pagamentos",
