@@ -6,6 +6,7 @@ import { createBestfyTransaction, getBestfyTransactionStatus, type BestfyConfig 
 import { createBabylonTransaction, getBabylonTransactionStatus, type BabylonConfig } from './babylonApi';
 import { createGhostsPaysTransaction, getGhostsPaysTransactionStatus, type GhostsPaysConfig } from './ghostspaysApi';
 import { createParadisePaysTransaction, getParadisePaysTransactionStatus, type ParadisePaysConfig } from './paradisepaysApi';
+import { createDuttyfyTransaction, getDuttyfyTransactionStatus, type DuttyfyConfig } from './duttyfyApi';
 import { getNextProductName } from '../utils/productNameRotation';
 
 const supabase = createClient(
@@ -17,7 +18,7 @@ export { supabase };
 
 export interface PixProviderSettings {
   id: string;
-  provider: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays';
+  provider: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays' | 'duttyfy';
   api_url: string;
   api_key: string;
   store_code?: string;
@@ -100,7 +101,18 @@ export async function createTransaction(data: CreateTransactionRequest, options?
     createReceipt: options?.createReceipt !== false,
   };
 
-  if (provider.provider === 'paradisepays') {
+  if (provider.provider === 'duttyfy') {
+    if (!provider.api_key) {
+      throw new Error('Duttyfy Encrypted Key must be configured');
+    }
+
+    const duttyfyConfig: DuttyfyConfig = {
+      apiUrl: provider.api_url,
+      encryptedKey: provider.api_key,
+    };
+
+    return createDuttyfyTransaction(duttyfyConfig, transactionData);
+  } else if (provider.provider === 'paradisepays') {
     if (!provider.api_key) {
       throw new Error('ParadisePays API Key must be configured');
     }
@@ -213,7 +225,21 @@ export async function getTransactionStatus(transactionId: string): Promise<Trans
 
   let newStatus: string;
 
-  if (provider.provider === 'paradisepays') {
+  if (provider.provider === 'duttyfy') {
+    if (!provider.api_key) {
+      throw new Error('Duttyfy Encrypted Key must be configured');
+    }
+
+    const duttyfyConfig: DuttyfyConfig = {
+      apiUrl: provider.api_url,
+      encryptedKey: provider.api_key,
+    };
+
+    newStatus = await getDuttyfyTransactionStatus(
+      duttyfyConfig,
+      transaction.genesys_transaction_id
+    );
+  } else if (provider.provider === 'paradisepays') {
     if (!provider.api_key) {
       throw new Error('ParadisePays API Key must be configured');
     }

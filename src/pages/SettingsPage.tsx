@@ -14,7 +14,7 @@ const supabase = createClient(
 
 interface ProviderSettings {
   id?: string;
-  provider: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays';
+  provider: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays' | 'duttyfy';
   api_url: string;
   api_key: string;
   store_code?: string;
@@ -30,7 +30,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [activeProvider, setActiveProvider] = useState<'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays'>('genesys');
+  const [activeProvider, setActiveProvider] = useState<'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays' | 'duttyfy'>('genesys');
   const [providers, setProviders] = useState<Record<string, ProviderSettings>>({
     genesys: {
       provider: 'genesys',
@@ -84,6 +84,12 @@ export default function SettingsPage() {
       public_key: '',
       is_active: false,
     },
+    duttyfy: {
+      provider: 'duttyfy',
+      api_url: 'https://app.duttyfy.com.br/api-pix',
+      api_key: '',
+      is_active: false,
+    },
   });
 
   useEffect(() => {
@@ -101,7 +107,7 @@ export default function SettingsPage() {
 
       if (data && data.length > 0) {
         const settingsMap: Record<string, ProviderSettings> = {};
-        let active: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays' = 'genesys';
+        let active: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays' | 'duttyfy' = 'genesys';
 
         data.forEach((setting: any) => {
           settingsMap[setting.provider] = setting;
@@ -118,6 +124,7 @@ export default function SettingsPage() {
           babylon: settingsMap.babylon || prev.babylon,
           ghostspays: settingsMap.ghostspays || prev.ghostspays,
           paradisepays: settingsMap.paradisepays || prev.paradisepays,
+          duttyfy: settingsMap.duttyfy || prev.duttyfy,
         }));
         setActiveProvider(active);
       }
@@ -129,7 +136,7 @@ export default function SettingsPage() {
   };
 
   const handleInputChange = (
-    provider: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays',
+    provider: 'genesys' | 'mangofy' | 'aureo' | 'bestfy' | 'babylon' | 'ghostspays' | 'paradisepays' | 'duttyfy',
     field: keyof ProviderSettings,
     value: string
   ) => {
@@ -155,6 +162,7 @@ export default function SettingsPage() {
       const babylonSettings = providers.babylon;
       const ghostspaysSettings = providers.ghostspays;
       const paradisepaysSettings = providers.paradisepays;
+      const duttyfySettings = providers.duttyfy;
 
       if (activeProvider === 'genesys') {
         if (!genesysSettings.api_url || !genesysSettings.api_key) {
@@ -183,6 +191,10 @@ export default function SettingsPage() {
       } else if (activeProvider === 'paradisepays') {
         if (!paradisepaysSettings.api_url || !paradisepaysSettings.api_key || !paradisepaysSettings.public_key) {
           throw new Error('Preencha todos os campos da ParadisePays');
+        }
+      } else if (activeProvider === 'duttyfy') {
+        if (!duttyfySettings.api_url || !duttyfySettings.api_key) {
+          throw new Error('Preencha todos os campos da Duttyfy');
         }
       }
 
@@ -220,6 +232,10 @@ export default function SettingsPage() {
         {
           ...paradisepaysSettings,
           is_active: activeProvider === 'paradisepays',
+        },
+        {
+          ...duttyfySettings,
+          is_active: activeProvider === 'duttyfy',
         },
       ];
 
@@ -351,7 +367,7 @@ export default function SettingsPage() {
               <div className="w-1.5 h-5 bg-[#8A05BE] rounded-full"></div>
               Provedor Ativo
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-3">
               <button
                 onClick={() => setActiveProvider('genesys')}
                 className={`group relative py-4 px-5 rounded-xl border-2 font-semibold text-sm transition-all duration-300 touch-manipulation overflow-hidden ${
@@ -496,6 +512,27 @@ export default function SettingsPage() {
                   )}
                 </div>
                 {activeProvider === 'paradisepays' && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#8A05BE]/5 to-transparent"></div>
+                )}
+              </button>
+              <button
+                onClick={() => setActiveProvider('duttyfy')}
+                className={`group relative py-4 px-5 rounded-xl border-2 font-semibold text-sm transition-all duration-300 touch-manipulation overflow-hidden ${
+                  activeProvider === 'duttyfy'
+                    ? 'border-[#8A05BE] bg-gradient-to-br from-[#8A05BE]/10 to-[#8A05BE]/5 text-[#8A05BE] shadow-lg shadow-[#8A05BE]/20'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-[#8A05BE]/50 hover:shadow-md'
+                }`}
+              >
+                <div className="relative z-10 flex flex-col items-center gap-2">
+                  <span className="text-base">Duttyfy</span>
+                  {activeProvider === 'duttyfy' && (
+                    <span className="flex items-center gap-1.5 text-xs font-medium">
+                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                      Ativo
+                    </span>
+                  )}
+                </div>
+                {activeProvider === 'duttyfy' && (
                   <div className="absolute inset-0 bg-gradient-to-br from-[#8A05BE]/5 to-transparent"></div>
                 )}
               </button>
@@ -945,6 +982,58 @@ export default function SettingsPage() {
                       handleInputChange('paradisepays', 'public_key', e.target.value)
                     }
                     placeholder="ID da sua conta na ParadisePays"
+                    className="w-full px-4 py-3 text-sm bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8A05BE] focus:border-[#8A05BE] transition-all duration-200 touch-manipulation"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`p-6 rounded-xl border-2 transition-all duration-300 ${
+                activeProvider === 'duttyfy'
+                  ? 'border-[#8A05BE] bg-gradient-to-br from-[#8A05BE]/5 to-transparent shadow-lg'
+                  : 'border-gray-200 bg-gray-50/50'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <div className={`w-1 h-6 rounded-full ${
+                    activeProvider === 'duttyfy' ? 'bg-[#8A05BE]' : 'bg-gray-300'
+                  }`}></div>
+                  Configuração Duttyfy
+                </h2>
+                {activeProvider === 'duttyfy' && (
+                  <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                    PROVEDOR ATIVO
+                  </span>
+                )}
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    URL da API
+                  </label>
+                  <input
+                    type="text"
+                    value={providers.duttyfy.api_url}
+                    onChange={(e) =>
+                      handleInputChange('duttyfy', 'api_url', e.target.value)
+                    }
+                    placeholder="https://app.duttyfy.com.br/api-pix"
+                    className="w-full px-4 py-3 text-sm bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8A05BE] focus:border-[#8A05BE] transition-all duration-200 touch-manipulation"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Chave Encriptada (Encrypted Key)
+                  </label>
+                  <input
+                    type="password"
+                    value={providers.duttyfy.api_key || ''}
+                    onChange={(e) =>
+                      handleInputChange('duttyfy', 'api_key', e.target.value)
+                    }
+                    placeholder="Sua chave encriptada da Duttyfy"
                     className="w-full px-4 py-3 text-sm bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8A05BE] focus:border-[#8A05BE] transition-all duration-200 touch-manipulation"
                   />
                 </div>
