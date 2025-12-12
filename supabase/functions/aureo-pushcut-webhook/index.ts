@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const PUSH_PAID = "https://api.pushcut.io/RQXs4um6IEk1tr-Y3VHki/notifications/Pagamento%20aprovado%20";
-const PUSH_PENDING = "https://api.pushcut.io/RQXs4um6IEk1tr-Y3VHki/notifications/MinhaNotifica%C3%A7%C3%A3o";
+const PUSH_PENDING = "https://api.pushcut.io/58TFXTcu8DSqjQ6mkCrz_/notifications/Pix%20gerado";
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
