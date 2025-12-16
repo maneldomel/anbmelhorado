@@ -7,14 +7,6 @@ import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
 import { navigateWithParams } from '../utils/urlParams';
 
-declare global {
-  interface Window {
-    addUtm: (url: string) => string;
-  }
-}
-
-const addUtm = window.addUtm;
-
 export default function AccountVerifiedPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -126,16 +118,12 @@ export default function AccountVerifiedPage() {
               </div>
             </div>
 
-            <a
-              href="javascript:void(0)"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = addUtm('/perguntas-perfil');
-              }}
+            <button
+              onClick={handleContinue}
               className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-md text-sm animate-slide-in-up-delayed-2 block text-center"
             >
               Continuar Consulta
-            </a>
+            </button>
           </div>
         </div>
       </main>

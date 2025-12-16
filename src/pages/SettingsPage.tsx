@@ -4,8 +4,6 @@ import { ArrowLeft, Save, AlertCircle, CheckCircle2, Settings, CreditCard } from
 import { createClient } from '@supabase/supabase-js';
 import UserLogsViewer from '../components/UserLogsViewer';
 import ReceiptsViewer from '../components/ReceiptsViewer';
-import CampaignAnalytics from '../components/CampaignAnalytics';
-import UtmifySync from '../components/UtmifySync';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -1055,14 +1053,6 @@ export default function SettingsPage() {
             </button>
           </div>
         </div>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-6 p-6">
-        <UtmifySync />
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-6 p-6">
-        <CampaignAnalytics />
       </div>
 
       <ReceiptsViewer />

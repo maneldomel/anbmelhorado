@@ -2,8 +2,13 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/gh/xTracky/static@latest/utm-handler.js" data-token="40619acb-07ce-423d-b9a5-482c7d730dc9"></script>
+    <script
+      src="https://cdn.jsdelivr.net/gh/xTracky/static@latest/utm-handler.js"
+      data-token="40619acb-07ce-423d-b9a5-482c7d730dc9"
+    >
+    </script>
     <script>
+      // Helper simples para preservar parâmetros da URL nas navegações internas.
       function addUtm(url){const p=window.location.search;return p?url+(url.includes('?')?'&':'?')+p.substring(1):url}
     </script>
     <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
@@ -129,40 +134,9 @@
       })();
     </script>
     
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '4154012174863560');
-    fbq('track', 'PageView');
-    </script>
-    <!-- End Meta Pixel Code -->
   </head>
   <body class="font-sans antialiased text-gray-800">
-    <noscript>
-      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4154012174863560&ev=PageView&noscript=1"/>
-    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-
-    <!-- FyCloak Script - Carrega em todas as páginas exceto /settings -->
-    <script>
-      (function() {
-        if (window.location.pathname !== '/settings') {
-          window.FYCLOAK_CAMPAIGN_ID = 487;
-          window.FYCLOAK_USER_ID = 64;
-
-          const script = document.createElement('script');
-          script.src = 'https://cdn.fycloak.com/scripts/advanced-fingerprint.js';
-          document.body.appendChild(script);
-        }
-      })();
-    </script>
   </body>
 </html>

@@ -46,14 +46,7 @@ export async function createBestfyTransaction(
         },
       ],
       postbackUrl: `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/bestfy-webhook`,
-      metadata: JSON.stringify({
-        utm_source: data.utmSource,
-        utm_medium: data.utmMedium,
-        utm_campaign: data.utmCampaign,
-        utm_term: data.utmTerm,
-        utm_content: data.utmContent,
-        src: data.src,
-      }),
+      metadata: undefined,
       ip: '127.0.0.1',
     };
 
@@ -109,12 +102,6 @@ export async function createBestfyTransaction(
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-      utm_source: data.utmSource,
-      utm_medium: data.utmMedium,
-      utm_campaign: data.utmCampaign,
-      utm_term: data.utmTerm,
-      utm_content: data.utmContent,
-      src: data.src,
     };
 
     const { error } = await supabase.from('transactions').insert(transaction);

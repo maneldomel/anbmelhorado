@@ -5,7 +5,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
 import { getUserName } from '../utils/userUtils';
-import { trackPurchase } from '../utils/facebookPixel';
 import { clearFunnelData } from '../utils/funnelStorage';
 
 export default function FinalPage() {
@@ -19,16 +18,6 @@ export default function FinalPage() {
   const handleMenuClose = () => {
     setIsMenuOpen(false);
   };
-
-  useEffect(() => {
-    trackPurchase({
-      value: 17.30,
-      currency: 'BRL',
-      content_type: 'upsell',
-      content_name: 'Upsell',
-      num_items: 1,
-    });
-  }, []);
 
   const handleBackToHome = () => {
     navigate('/');

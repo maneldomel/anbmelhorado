@@ -7,7 +7,6 @@ import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
 import { getUserName } from '../utils/userUtils';
 import { navigateWithParams } from '../utils/urlParams';
-import { trackPurchase } from '../utils/facebookPixel';
 
 export default function Upsell5Page() {
   const navigate = useNavigate();
@@ -25,14 +24,6 @@ export default function Upsell5Page() {
   };
 
   useEffect(() => {
-    trackPurchase({
-      value: 12.99,
-      currency: 'BRL',
-      content_type: 'upsell',
-      content_name: 'Upsell',
-      num_items: 1,
-    });
-
     saveFunnelData({
       currentStep: '/upsell-5'
     });

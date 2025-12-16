@@ -7,14 +7,6 @@ import UserMenu from '../components/UserMenu';
 import { navigateWithParams } from '../utils/urlParams';
 import { getFunnelData } from '../utils/funnelStorage';
 
-declare global {
-  interface Window {
-    addUtm: (url: string) => string;
-  }
-}
-
-const addUtm = window.addUtm;
-
 export default function VSLPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -165,16 +157,12 @@ export default function VSLPage() {
 
             {isButtonEnabled && (
               <div ref={buttonRef} className="mt-5 animate-slide-up">
-                <a
-                  href="javascript:void(0)"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = addUtm('/detalhamento-taxas');
-                  }}
+                <button
+                  onClick={handleContinue}
                   className="w-full text-base sm:text-lg font-bold py-4 sm:py-5 px-6 rounded-xl transition-all duration-300 uppercase bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl hover:shadow-2xl transform hover:-translate-y-1 animate-pulse-subtle-fast block text-center"
                 >
                   Liberar Empréstimo Agora
-                </a>
+                </button>
               </div>
             )}
           </div>

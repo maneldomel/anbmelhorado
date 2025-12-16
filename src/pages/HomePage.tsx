@@ -9,7 +9,6 @@ import FAQSection from '../components/FAQSection';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { navigateWithParams } from '../utils/urlParams';
-import { trackViewContent } from '../utils/facebookPixel';
 import { saveFunnelData, getFunnelData } from '../utils/funnelStorage';
 
 const HomePage: React.FC = () => {
@@ -19,13 +18,6 @@ const HomePage: React.FC = () => {
   const location = useLocation();
   const formAnimation = useScrollAnimation();
   const buttonAnimation = useScrollAnimation();
-
-  useEffect(() => {
-    trackViewContent({
-      content_name: 'Home Page',
-      content_category: 'Landing Page',
-    });
-  }, []);
 
   const handleCPFSubmit = async (cpf: string) => {
     setIsLoading(true);

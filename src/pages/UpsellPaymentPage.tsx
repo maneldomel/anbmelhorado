@@ -7,8 +7,7 @@ import DevWebhookSimulator from '../components/DevWebhookSimulator';
 import { createTransaction } from '../services/pixService';
 import { getUserName } from '../utils/userUtils';
 import { useTransactionPolling } from '../hooks/useTransactionPolling';
-import { navigateWithParams, getTrackingData } from '../utils/urlParams';
-import { trackInitiateCheckout } from '../utils/facebookPixel';
+import { navigateWithParams } from '../utils/urlParams';
 import { saveFunnelData, getFunnelData } from '../utils/funnelStorage';
 
 export default function UpsellPaymentPage() {
@@ -118,8 +117,6 @@ export default function UpsellPaymentPage() {
         setLoading(true);
         setError(null);
 
-        const trackingData = getTrackingData(location);
-        console.log('Upsell - Tracking data extracted:', trackingData);
         console.log('Upsell - userData:', userData);
 
         console.log('📞 Calling createTransaction API...');
@@ -140,15 +137,6 @@ export default function UpsellPaymentPage() {
             city: userData.endereco.cidade,
             state: userData.endereco.estado,
           } : undefined,
-          utmSource: trackingData.utmSource,
-          utmMedium: trackingData.utmMedium,
-          utmCampaign: trackingData.utmCampaign,
-          utmTerm: trackingData.utmTerm,
-          utmContent: trackingData.utmContent,
-          src: trackingData.src,
-          sck: trackingData.sck,
-          productId: trackingData.productId,
-          userAgent: trackingData.userAgent,
         }, { createReceipt: false });
 
         console.log('✅ Transaction created:', {
@@ -161,15 +149,6 @@ export default function UpsellPaymentPage() {
         setTransactionData(transaction);
         setLoading(false);
         isCreatingTransaction.current = false;
-
-        trackInitiateCheckout({
-          value: amount,
-          currency: 'BRL',
-          content_type: 'upsell',
-          content_name: title || 'Upsell',
-          content_ids: [transaction.id],
-          num_items: 1,
-        });
       } catch (err: any) {
         console.error('Failed to create transaction:', err);
         setError(err.message || 'Falha ao criar transação. Tente novamente.');

@@ -5,9 +5,8 @@ import { AlertTriangle, FileText, Clock } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
-import { getUserName } from '../utils/userUtils';
+import { getUserName } from '../utils.userUtils';
 import { navigateWithParams } from '../utils/urlParams';
-import { trackPurchase } from '../utils/facebookPixel';
 
 export default function Upsell4Page() {
   const navigate = useNavigate();
@@ -24,14 +23,6 @@ export default function Upsell4Page() {
   };
 
   useEffect(() => {
-    trackPurchase({
-      value: 14.90,
-      currency: 'BRL',
-      content_type: 'upsell',
-      content_name: 'Upsell',
-      num_items: 1,
-    });
-
     saveFunnelData({
       currentStep: '/upsell-4'
     });

@@ -21,12 +21,6 @@ export interface CreateMangofyTransactionRequest {
   customerPhone?: string;
   externalCode?: string;
   createReceipt?: boolean;
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  utmTerm?: string;
-  utmContent?: string;
-  src?: string;
 }
 
 export interface MangofyTransaction {
@@ -77,12 +71,6 @@ export async function createMangofyTransaction(
           customerEmail: data.customerEmail,
           customerPhone: data.customerPhone,
           externalCode: data.externalCode,
-          utmSource: data.utmSource,
-          utmMedium: data.utmMedium,
-          utmCampaign: data.utmCampaign,
-          utmTerm: data.utmTerm,
-          utmContent: data.utmContent,
-          src: data.src,
         }),
       }
     );

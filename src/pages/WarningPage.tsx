@@ -5,14 +5,6 @@ import Footer from '../components/Footer';
 import { AlertTriangle } from 'lucide-react';
 import { navigateWithParams } from '../utils/urlParams';
 
-declare global {
-  interface Window {
-    addUtm: (url: string) => string;
-  }
-}
-
-const addUtm = window.addUtm;
-
 const WarningPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,16 +50,12 @@ const WarningPage: React.FC = () => {
               </h2>
             </div>
             
-            <a
-              href="javascript:void(0)"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = addUtm('/chat');
-              }}
+            <button
+              onClick={handleContinue}
               className="w-full bg-purple-600 text-white font-semibold py-3 md:py-4 px-6 text-sm md:text-base rounded-xl transition-all duration-300 hover:bg-purple-700 transform hover:-translate-y-1 hover:shadow-lg block text-center"
             >
               RESGATAR BENEFÍCIO AGORA
-            </a>
+            </button>
           </div>
         </div>
       </main>

@@ -7,14 +7,6 @@ import UserMenu from '../components/UserMenu';
 import { navigateWithParams } from '../utils/urlParams';
 import { saveFunnelData, getFunnelData } from '../utils/funnelStorage';
 
-declare global {
-  interface Window {
-    addUtm: (url: string) => string;
-  }
-}
-
-const addUtm = window.addUtm;
-
 const ResultPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -159,16 +151,12 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
 
-                <a
-                  href="javascript:void(0)"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = addUtm('/chat');
-                  }}
+                <button
+                  onClick={handleChatClick}
                   className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-5 px-8 rounded-xl transition-all duration-300 hover:shadow-lg w-full max-w-md mx-auto text-lg block text-center"
                 >
                   Validar Identidade
-                </a>
+                </button>
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-6">

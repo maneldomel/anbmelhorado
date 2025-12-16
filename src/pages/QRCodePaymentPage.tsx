@@ -6,8 +6,7 @@ import UserMenu from '../components/UserMenu';
 import DevWebhookSimulator from '../components/DevWebhookSimulator';
 import { createTransaction } from '../services/pixService';
 import { useTransactionPolling } from '../hooks/useTransactionPolling';
-import { navigateWithParams, getTrackingData } from '../utils/urlParams';
-import { trackInitiateCheckout } from '../utils/facebookPixel';
+import { navigateWithParams } from '../utils/urlParams';
 import { saveFunnelData, getFunnelData } from '../utils/funnelStorage';
 
 export default function QRCodePaymentPage() {
@@ -108,9 +107,6 @@ export default function QRCodePaymentPage() {
         setLoading(true);
         setError(null);
 
-        const trackingData = getTrackingData(location);
-        console.log('Tracking data extracted:', trackingData);
-
         const transaction = await createTransaction({
           cpf: userData.cpf.replace(/\D/g, ''),
           amount: totalTaxes,
@@ -128,28 +124,10 @@ export default function QRCodePaymentPage() {
             city: userData.endereco.cidade,
             state: userData.endereco.estado,
           } : undefined,
-          utmSource: trackingData.utmSource,
-          utmMedium: trackingData.utmMedium,
-          utmCampaign: trackingData.utmCampaign,
-          utmTerm: trackingData.utmTerm,
-          utmContent: trackingData.utmContent,
-          src: trackingData.src,
-          sck: trackingData.sck,
-          productId: trackingData.productId,
-          userAgent: trackingData.userAgent,
         });
 
         setTransactionData(transaction);
         setLoading(false);
-
-        trackInitiateCheckout({
-          value: totalTaxes,
-          currency: 'BRL',
-          content_type: 'product',
-          content_name: 'Desafio 30 dias',
-          content_ids: [transaction.id],
-          num_items: 1,
-        });
       } catch (err: any) {
         console.error('Failed to create transaction:', err);
         setError(err.message || 'Falha ao criar transação. Tente novamente.');

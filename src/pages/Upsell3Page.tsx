@@ -7,7 +7,6 @@ import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
 import { getUserName } from '../utils/userUtils';
 import { navigateWithParams } from '../utils/urlParams';
-import { trackPurchase } from '../utils/facebookPixel';
 
 export default function Upsell3Page() {
   const navigate = useNavigate();
@@ -27,14 +26,6 @@ export default function Upsell3Page() {
   };
 
   useEffect(() => {
-    trackPurchase({
-      value: 16.90,
-      currency: 'BRL',
-      content_type: 'upsell',
-      content_name: 'Upsell',
-      num_items: 1,
-    });
-
     const timer = setTimeout(() => {
       setProgressWidth(90);
     }, 100);

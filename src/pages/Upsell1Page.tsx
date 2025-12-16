@@ -6,17 +6,8 @@ import Footer from '../components/Footer';
 import UserMenu from '../components/UserMenu';
 import { getUserName } from '../utils/funnelStorage';
 import { navigateWithParams } from '../utils/urlParams';
-import { trackPurchase } from '../utils/facebookPixel';
 import { saveFunnelData, getFunnelData } from '../utils/funnelStorage';
 import { useAutoplayAudio } from '../hooks/useAutoplayAudio';
-
-declare global {
-  interface Window {
-    addUtm: (url: string) => string;
-  }
-}
-
-const addUtm = window.addUtm;
 
 interface ProcessingStep {
   id: number;
@@ -59,14 +50,6 @@ export default function Upsell1Page() {
   });
 
   useEffect(() => {
-    trackPurchase({
-      value: 34.57,
-      currency: 'BRL',
-      content_type: 'product',
-      content_name: 'Desafio 30 dias',
-      num_items: 1,
-    });
-
     saveFunnelData({
       currentStep: '/upsell-1'
     });
@@ -353,16 +336,12 @@ export default function Upsell1Page() {
                   <p className="text-3xl font-bold text-purple-600">R$ 19,90</p>
                 </div>
 
-                <a
-                  href="javascript:void(0)"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = addUtm('/upsell-payment');
-                  }}
+                <button
+                  onClick={handleRegularizarTaxa}
                   className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mb-4 block text-center"
                 >
                   REGULARIZAR TAXA
-                </a>
+                </button>
 
                 <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4">
                   <div className="flex gap-2">

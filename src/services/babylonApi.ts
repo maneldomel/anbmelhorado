@@ -27,12 +27,6 @@ export async function createBabylonTransaction(
       customerName: data.customerName,
       customerEmail: data.customerEmail,
       customerPhone: data.customerPhone,
-      utmSource: data.utmSource,
-      utmMedium: data.utmMedium,
-      utmCampaign: data.utmCampaign,
-      utmTerm: data.utmTerm,
-      utmContent: data.utmContent,
-      src: data.src,
     };
 
     const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/babylon-create-transaction`;

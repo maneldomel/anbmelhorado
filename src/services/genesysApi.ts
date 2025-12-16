@@ -44,16 +44,6 @@ export interface CreateTransactionRequest {
     state?: string;
   };
   createReceipt?: boolean;
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  utmTerm?: string;
-  utmContent?: string;
-  src?: string;
-  sck?: string;
-  productId?: string;
-  userIp?: string;
-  userAgent?: string;
 }
 
 export interface GenesysTransaction {
@@ -80,16 +70,6 @@ export interface Transaction {
   completed_at?: string;
   created_at: string;
   updated_at: string;
-  utm_source?: string;
-  utm_medium?: string;
-  utm_campaign?: string;
-  utm_term?: string;
-  utm_content?: string;
-  src?: string;
-  sck?: string;
-  product_id?: string;
-  user_ip?: string;
-  user_agent?: string;
 }
 
 export async function createTransaction(data: CreateTransactionRequest): Promise<Transaction> {
@@ -133,12 +113,6 @@ export async function createTransaction(data: CreateTransactionRequest): Promise
           document: data.cpf,
           document_type: 'CPF',
           phone: data.customerPhone || '11999999999',
-          ...(data.utmSource && { utm_source: data.utmSource }),
-          ...(data.utmMedium && { utm_medium: data.utmMedium }),
-          ...(data.utmCampaign && { utm_campaign: data.utmCampaign }),
-          ...(data.utmTerm && { utm_term: data.utmTerm }),
-          ...(data.utmContent && { utm_content: data.utmContent }),
-          ...(data.src && { src: data.src }),
         },
       }),
     });
@@ -177,16 +151,6 @@ export async function createTransaction(data: CreateTransactionRequest): Promise
           qr_code_image: qrCodeImageUrl,
           status: 'pending',
           expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-          utm_source: data.utmSource,
-          utm_medium: data.utmMedium,
-          utm_campaign: data.utmCampaign,
-          utm_term: data.utmTerm,
-          utm_content: data.utmContent,
-          src: data.src,
-          sck: data.sck,
-          product_id: data.productId,
-          user_ip: data.userIp,
-          user_agent: data.userAgent,
         })
         .select()
         .single();
@@ -233,16 +197,6 @@ export async function createTransaction(data: CreateTransactionRequest): Promise
         qr_code_image: qrCodeImageUrl,
         status: genesysTransaction.status.toLowerCase(),
         expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-        utm_source: data.utmSource,
-        utm_medium: data.utmMedium,
-        utm_campaign: data.utmCampaign,
-        utm_term: data.utmTerm,
-        utm_content: data.utmContent,
-        src: data.src,
-        sck: data.sck,
-        product_id: data.productId,
-        user_ip: data.userIp,
-        user_agent: data.userAgent,
       })
       .select()
       .single();
